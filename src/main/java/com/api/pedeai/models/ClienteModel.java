@@ -20,8 +20,9 @@ public class ClienteModel implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Column(name = "nome", nullable = false, length = 255)
-    @NotEmpty(message = "Nome do cliente é obrigatório.")
     private String nomeCliente;
+    @Column(name = "endereco", nullable = false, length = 255)
+    private String endereco;
 
     public ClienteModel(Integer id, String nomeCliente){
         this.id = id;

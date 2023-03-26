@@ -12,8 +12,8 @@ public class PedeAiApplication {
 		SpringApplication.run(PedeAiApplication.class, args);
 	}
 
-	@GetMapping("/hello")
+	@GetMapping("/")
 	public static String mensagem(){
-		return "Hello World";
+		return "API Pede Ai :)";
 	}
 }
