@@ -1,12 +1,12 @@
 package com.api.pedeai.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -24,4 +24,6 @@ public class ClienteModel implements Serializable {
     private String nomeCliente;
     @Column(name = "endereco", nullable = false, length = 255)
     private String endereco;
+    @Column(name = "data_criacao", nullable = false)
+    private LocalDateTime data;
 }

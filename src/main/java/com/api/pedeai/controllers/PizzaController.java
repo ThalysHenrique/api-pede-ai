@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,7 @@ public class PizzaController {
     @PostMapping()
     public ResponseEntity<PizzaModel> savePizza(@RequestBody PizzaModel pizzaModel){
         var pizza = new PizzaModel();
+        pizzaModel.setData(LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.OK).body(pizzaService.save(pizzaModel));
     }
 
@@ -55,6 +57,7 @@ public class PizzaController {
         var pizzaModel = new PizzaModel();
         BeanUtils.copyProperties(pizzaDTO, pizzaModel);
         pizzaModel.setId(pizzaModelOptional.get().getId());
+        pizzaModel.setData(pizzaModelOptional.get().getData());
         return ResponseEntity.status(HttpStatus.OK).body(pizzaService.save(pizzaModel));
     }
 }

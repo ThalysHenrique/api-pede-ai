@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +41,7 @@ public class ClienteController {
     @PostMapping
     public ResponseEntity<Object> saveCliente(@RequestBody ClienteModel clienteModel){
         var cliente = new ClienteModel();
+        clienteModel.setData(LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.save(clienteModel));
     }
 
@@ -63,6 +65,7 @@ public class ClienteController {
         var clienteModel = new ClienteModel();
         BeanUtils.copyProperties(clienteDTO, clienteModel);
         clienteModel.setId(clienteModelOptional.get().getId());
+        clienteModel.setData(clienteModelOptional.get().getData());
         return ResponseEntity.status(HttpStatus.OK).body(clienteService.save(clienteModel));
     }
 }

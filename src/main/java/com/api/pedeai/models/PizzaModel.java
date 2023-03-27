@@ -3,11 +3,10 @@ package com.api.pedeai.models;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Generated;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.UUID;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -24,6 +23,6 @@ public class PizzaModel implements Serializable {
     private String nome;
     @Column(name = "preco", nullable = false, length = 255)
     private double preco;
-
-
+    @Column(name = "data_criacao", nullable = false)
+    private LocalDateTime data;
     }
