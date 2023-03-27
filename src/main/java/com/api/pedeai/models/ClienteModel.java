@@ -20,12 +20,12 @@ public class ClienteModel implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Column(name = "nome", nullable = false, length = 255)
-    private String nomeCliente;
+    private String nome;
     @Column(name = "endereco", nullable = false, length = 255)
     private String endereco;
 
-    public ClienteModel(Integer id, String nomeCliente){
+    public ClienteModel(Integer id, String nome){
         this.id = id;
-        this.nomeCliente = nomeCliente;
+        this.nome = nome;
     }
 }

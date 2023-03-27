@@ -9,20 +9,20 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.util.UUID;
 
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Entity
-//@Table(name = "TB_PIZZA")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "TB_PIZZA")
 public class PizzaModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    private Integer id;
-//    @Column(nullable = false, length = 255)
-//    private String nomePizza;
-//    @Column(nullable = false, length = 255)
-//    private double precoPizza;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+    @Column(name = "nome",nullable = false, length = 255)
+    private String nome;
+    @Column(name = "preco", nullable = false, length = 255)
+    private double preco;
 
     }
