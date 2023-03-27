@@ -11,6 +11,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "TB_CLIENTE")
 public class ClienteModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -20,12 +21,7 @@ public class ClienteModel implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Column(name = "nome", nullable = false, length = 255)
-    private String nome;
+    private String nomeCliente;
     @Column(name = "endereco", nullable = false, length = 255)
     private String endereco;
-
-    public ClienteModel(Integer id, String nome){
-        this.id = id;
-        this.nome = nome;
-    }
 }

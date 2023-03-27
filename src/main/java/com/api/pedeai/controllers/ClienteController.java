@@ -1,7 +1,10 @@
 package com.api.pedeai.controllers;
 
+import com.api.pedeai.dtos.ClienteDTO;
 import com.api.pedeai.models.ClienteModel;
 import com.api.pedeai.services.ClienteService;
+import jakarta.validation.Valid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,12 +55,13 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> alteraCliente(@PathVariable Integer id){
+    public ResponseEntity<Object> alteraCliente(@PathVariable Integer id, @RequestBody @Valid ClienteDTO clienteDTO){
         Optional<ClienteModel> clienteModelOptional = clienteService.findById(id);
         if(!clienteModelOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não foi encontrado.");
         }
         var clienteModel = new ClienteModel();
+        BeanUtils.copyProperties(clienteDTO, clienteModel);
         clienteModel.setId(clienteModelOptional.get().getId());
         return ResponseEntity.status(HttpStatus.OK).body(clienteService.save(clienteModel));
     }

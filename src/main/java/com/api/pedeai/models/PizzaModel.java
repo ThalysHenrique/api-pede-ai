@@ -25,4 +25,5 @@ public class PizzaModel implements Serializable {
     @Column(name = "preco", nullable = false, length = 255)
     private double preco;
 
+
     }
