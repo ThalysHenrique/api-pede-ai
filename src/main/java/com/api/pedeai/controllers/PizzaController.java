@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/pizza")
@@ -39,9 +40,9 @@ public class PizzaController {
 
     @Transactional
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deletaPizza(@PathVariable Integer id){
+    public ResponseEntity<Object> deletaPizza(@PathVariable(value = "id") UUID id){
         Optional<PizzaModel> pizzaModelOptional = pizzaService.findById(id);
-        if(!pizzaModelOptional.isPresent()){
+        if(pizzaModelOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pizza não foi encontrada");
         }
         pizzaService.delete(pizzaModelOptional.get());
@@ -49,9 +50,9 @@ public class PizzaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> alteraPizza(@PathVariable Integer id, @RequestBody @Valid PizzaDTO pizzaDTO){
+    public ResponseEntity<Object> alteraPizza(@PathVariable(value = "id") UUID id, @RequestBody @Valid PizzaDTO pizzaDTO){
         Optional<PizzaModel> pizzaModelOptional = pizzaService.findById(id);
-        if(!pizzaModelOptional.isPresent()){
+        if(pizzaModelOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pizza não foi encontrada.");
         }
         var pizzaModel = new PizzaModel();

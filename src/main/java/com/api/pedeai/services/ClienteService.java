@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ClienteService {
@@ -18,7 +19,7 @@ public class ClienteService {
     public List<ClienteModel> findAll(){
         return clienteRepository.findAll();
     }
-    public Optional<ClienteModel> findById(Integer id){
+    public Optional<ClienteModel> findById(UUID id){
         return clienteRepository.findById(id);
     }
 

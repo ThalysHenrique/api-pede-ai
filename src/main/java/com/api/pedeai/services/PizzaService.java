@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class PizzaService {
@@ -22,7 +23,7 @@ public class PizzaService {
         return pizzaRepository.findAll();
     }
 
-    public Optional<PizzaModel> findById(@PathVariable Integer id){
+    public Optional<PizzaModel> findById(@PathVariable UUID id){
         return pizzaRepository.findById(id);
     }
 

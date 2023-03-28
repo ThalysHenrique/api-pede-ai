@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/cliente")
@@ -29,9 +30,9 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getClienteById(@PathVariable Integer id){
+    public ResponseEntity<Object> getClienteById(@PathVariable(value="id") UUID id){
         Optional<ClienteModel> clienteModelOptional = clienteService.findById(id);
-        if(!clienteModelOptional.isPresent()){
+        if(clienteModelOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não foi encontrado.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(clienteModelOptional.get());
@@ -47,9 +48,9 @@ public class ClienteController {
 
     @Transactional
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deletaCliente(@PathVariable Integer id){
+    public ResponseEntity<Object> deletaCliente(@PathVariable(value="id") UUID id){
         Optional<ClienteModel> clienteModelOptional = clienteService.findById(id);
-        if(!clienteModelOptional.isPresent()){
+        if(clienteModelOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não foi encontrado.");
         }
         clienteService.delete(clienteModelOptional.get());
@@ -57,9 +58,9 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> alteraCliente(@PathVariable Integer id, @RequestBody @Valid ClienteDTO clienteDTO){
+    public ResponseEntity<Object> alteraCliente(@PathVariable(value="id") UUID id, @RequestBody @Valid ClienteDTO clienteDTO){
         Optional<ClienteModel> clienteModelOptional = clienteService.findById(id);
-        if(!clienteModelOptional.isPresent()){
+        if(clienteModelOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não foi encontrado.");
         }
         var clienteModel = new ClienteModel();
