@@ -20,7 +20,7 @@ public class PizzaModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    @Column(name = "nome",nullable = false, length = 255)
+    @Column(name = "nome", nullable = false, length = 255)
     private String nome;
     @Column(name = "preco", nullable = false, length = 255)
     private double preco;
@@ -28,6 +28,6 @@ public class PizzaModel implements Serializable {
     private LocalDateTime data;
 
     @ManyToOne
-    @JoinColumn(name = "pizza_id")
-    private ClienteModel clienteModel;
+    private PedidoModel pedidosModel;
+
     }

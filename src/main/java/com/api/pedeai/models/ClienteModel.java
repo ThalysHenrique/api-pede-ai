@@ -25,11 +25,13 @@ public class ClienteModel implements Serializable {
     private UUID id;
     @Column(name = "nome", nullable = false, length = 255)
     private String nomeCliente;
-    @Column(name = "endereco", nullable = false, length = 255)
+    @Column(name = "email")
+    private String email;
+    @Column(name = "endereco")
     private String endereco;
     @Column(name = "data_criacao", nullable = false)
     private LocalDateTime data;
 
-    @OneToMany(mappedBy = "clienteModel")
-    private List<PizzaModel> pizzas = new LinkedList<>();
+    @OneToMany(mappedBy = "clientes")
+    private List<PedidoModel> pedidos = new LinkedList<>();
 }

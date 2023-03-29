@@ -1,7 +1,6 @@
 package com.api.pedeai.repositories;
 
 import com.api.pedeai.models.ClienteModel;
-import com.api.pedeai.models.PizzaModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,5 +9,4 @@ import java.util.UUID;
 @Repository
 public interface ClienteRepository extends JpaRepository<ClienteModel, UUID> {
 
-    boolean existsByNomeCliente(String nomeCliente);
 }
