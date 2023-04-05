@@ -1,37 +1,33 @@
 package com.api.pedeai.services;
 
-import com.api.pedeai.models.PizzaModel;
+import com.api.pedeai.models.Pizza;
 import com.api.pedeai.repositories.PizzaRepository;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
+@RequiredArgsConstructor
 @Service
 public class PizzaService {
 
-    final PizzaRepository pizzaRepository;
+    private final PizzaRepository pizzaRepository;
 
-    public PizzaService(PizzaRepository pizzaRepository) {
-        this.pizzaRepository = pizzaRepository;
-    }
-
-    public List<PizzaModel> findAll(){
+    public List<Pizza> findAll(){
         return pizzaRepository.findAll();
     }
 
-    public Optional<PizzaModel> findById(@PathVariable UUID id){
+    public Optional<Pizza> findById(@PathVariable Integer id){
         return pizzaRepository.findById(id);
     }
 
-    public PizzaModel save(PizzaModel pizzaModel){
-        return pizzaRepository.save(pizzaModel);
+    public Pizza save(Pizza pizza){
+        return pizzaRepository.save(pizza);
     }
 
-    public void delete(PizzaModel pizzaModel){
-        pizzaRepository.delete(pizzaModel);
+    public void delete(Pizza pizza){
+        pizzaRepository.delete(pizza);
     }
 }

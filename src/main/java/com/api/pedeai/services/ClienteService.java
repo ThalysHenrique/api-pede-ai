@@ -1,35 +1,33 @@
 package com.api.pedeai.services;
 
-import com.api.pedeai.models.ClienteModel;
+import com.api.pedeai.models.Cliente;
 import com.api.pedeai.repositories.ClienteRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
+@RequiredArgsConstructor
 @Service
 public class ClienteService {
-    final ClienteRepository clienteRepository;
-    public ClienteService(ClienteRepository clienteRepository) {
-        this.clienteRepository = clienteRepository;
-    }
+    private final ClienteRepository clienteRepository;
 
-    public List<ClienteModel> findAll(){
+    public List<Cliente> findAll(){
         return clienteRepository.findAll();
     }
-    public Optional<ClienteModel> findById(UUID id){
+    public Optional<Cliente> findById(Integer id){
         return clienteRepository.findById(id);
     }
 
     @Transactional
-    public ClienteModel save(ClienteModel clienteModel){
-        return clienteRepository.save(clienteModel);
+    public Cliente save(Cliente cliente){
+        return clienteRepository.save(cliente);
     }
 
     @Transactional
-    public void delete(ClienteModel clienteModel){
-        clienteRepository.delete(clienteModel);
+    public void delete(Cliente cliente){
+        clienteRepository.delete(cliente);
     }
 }

@@ -1,22 +1,21 @@
 package com.api.pedeai.controllers;
 
-import com.api.pedeai.models.PedidoModel;
+import com.api.pedeai.exception.ResultadoException;
+import com.api.pedeai.models.Pedido;
 import com.api.pedeai.services.PedidoService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
 @RequestMapping("/pedidos")
 public class PedidoController {
 
-    final PedidoService pedidoService;
+    private PedidoService pedidoService;
 
     public PedidoController(PedidoService pedidoService) {
         this.pedidoService = pedidoService;
@@ -24,35 +23,35 @@ public class PedidoController {
 
 
     @GetMapping
-    public ResponseEntity<List<PedidoModel>> getAllPedidos(PedidoModel pedidoModel){
-        return ResponseEntity.status(HttpStatus.OK).body(pedidoService.findAll());
+    public List<Pedido> findAllPedidos(Pedido pedido){
+        return pedidoService.findAll();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> getById(@PathVariable(value = "id")UUID id){
-        Optional<PedidoModel> pedidoModelOptional = pedidoService.findById(id);
-        if(pedidoModelOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pedido não encontrado");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(pedidoModelOptional);
+    @GetMapping("{id}")
+    public Pedido findPedidoById(@PathVariable Integer id) {
+        return pedidoService.findById(id)
+                .map(pedidoExistente -> {
+                    pedidoExistente.getId();
+                    return pedidoExistente;
+                }).orElseThrow(() -> new ResultadoException("Pedido não encontrado"));
     }
 
     @Transactional
     @PostMapping
-    public ResponseEntity<PedidoModel> save(@RequestBody PedidoModel pedidoModel){
-        var pedido = new PedidoModel();
-        pedidoModel.setData(LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.OK).body(pedidoService.save(pedido));
+    @ResponseStatus(CREATED)
+    public Pedido savePedido(@RequestBody Pedido pedido){
+        return pedidoService.save(pedido);
     }
 
     @Transactional
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> delete(@PathVariable(value = "id") UUID id){
-        Optional<PedidoModel> pedidoModelOptional = pedidoService.findById(id);
-        if(pedidoModelOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pedido não encontrado.");
-        }
-        pedidoService.delete(pedidoModelOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Pedido deletado com sucesso.");
+    @DeleteMapping("{id}")
+    @ResponseStatus(NO_CONTENT)
+    public void delete(@PathVariable Integer id){
+        pedidoService.findById(id)
+                .map( pedidoExistente -> {
+                    pedidoExistente.getId();
+                    pedidoService.delete(pedidoExistente);
+                    return Void.TYPE;
+                }).orElseThrow(() -> new ResultadoException("Pedido não encontrado"));
     }
 }

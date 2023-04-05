@@ -1,72 +1,66 @@
 package com.api.pedeai.controllers;
 
-import com.api.pedeai.dtos.ClienteDTO;
-import com.api.pedeai.models.ClienteModel;
+import com.api.pedeai.exception.ResultadoException;
+import com.api.pedeai.models.Cliente;
 import com.api.pedeai.services.ClienteService;
-import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
-@RequestMapping("/cliente")
+@RequestMapping("/clientes")
 public class ClienteController {
 
-    final ClienteService clienteService;
+    private ClienteService clienteService;
     public ClienteController(ClienteService clienteService) {
         this.clienteService = clienteService;
     }
 
     @GetMapping
-    public ResponseEntity<List<ClienteModel>> getAllClientes(ClienteModel clienteModel){
-        return ResponseEntity.status(HttpStatus.OK).body(clienteService.findAll());
+    public List<Cliente> findAllClientes(Cliente cliente){
+        return clienteService.findAll();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> getClienteById(@PathVariable(value="id") UUID id){
-        Optional<ClienteModel> clienteModelOptional = clienteService.findById(id);
-        if(clienteModelOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não foi encontrado.");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(clienteModelOptional.get());
+    @GetMapping("{id}")
+    public Cliente findClienteById(@PathVariable Integer id){
+        return clienteService.findById(id)
+                .map( clienteExistente -> {
+                    clienteExistente.getId();
+                    return clienteExistente;
+                }).orElseThrow(() -> new ResultadoException("Cliente não foi encontrado."));
     }
 
-    @Transactional
     @PostMapping
-    public ResponseEntity<Object> saveCliente(@RequestBody ClienteModel clienteModel){
-        var cliente = new ClienteModel();
-        clienteModel.setData(LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.save(clienteModel));
+    @ResponseStatus(CREATED)
+    public Cliente saveCliente(@RequestBody Cliente cliente){
+        cliente.setData(LocalDateTime.now());
+        return clienteService.save(cliente);
     }
 
-    @Transactional
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deletaCliente(@PathVariable(value="id") UUID id){
-        Optional<ClienteModel> clienteModelOptional = clienteService.findById(id);
-        if(clienteModelOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não foi encontrado.");
-        }
-        clienteService.delete(clienteModelOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Cliente deletado com sucesso");
+    @DeleteMapping("{id}")
+    @ResponseStatus(NO_CONTENT)
+    public void deletaCliente(@PathVariable Integer id){
+            clienteService.findById(id)
+                .map( clienteExistente -> {
+                    clienteExistente.getId();
+                    clienteService.delete(clienteExistente);
+                    return Void.TYPE;
+                }).orElseThrow(() -> new ResultadoException("Cliente não foi encontrado."));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> alteraCliente(@PathVariable(value="id") UUID id, @RequestBody @Valid ClienteDTO clienteDTO){
-        Optional<ClienteModel> clienteModelOptional = clienteService.findById(id);
-        if(clienteModelOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não foi encontrado.");
-        }
-        var clienteModel = new ClienteModel();
-        BeanUtils.copyProperties(clienteDTO, clienteModel);
-        clienteModel.setId(clienteModelOptional.get().getId());
-        clienteModel.setData(clienteModelOptional.get().getData());
-        return ResponseEntity.status(HttpStatus.OK).body(clienteService.save(clienteModel));
+    @PutMapping("{id}")
+    @ResponseStatus(NO_CONTENT)
+    public void alteraCliente(@PathVariable Integer id, @RequestBody Cliente cliente){
+        clienteService.findById(id)
+                .map( clienteExistente -> {
+                    cliente.setId(clienteExistente.getId());
+                    cliente.setData(LocalDateTime.now());
+                    clienteService.save(cliente);
+                    return clienteExistente;
+                }).orElseThrow(() -> new ResultadoException("Cliente não foi encontrado."));
     }
 }

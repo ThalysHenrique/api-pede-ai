@@ -1,11 +1,9 @@
 package com.api.pedeai.repositories;
 
-import com.api.pedeai.models.PizzaModel;
+import com.api.pedeai.models.Pizza;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.UUID;
-
-public interface PizzaRepository extends JpaRepository<PizzaModel, UUID> {
+public interface PizzaRepository extends JpaRepository<Pizza, Integer> {
 
 
 }

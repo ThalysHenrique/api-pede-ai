@@ -1,22 +1,18 @@
 package com.api.pedeai.controllers;
 
-import com.api.pedeai.dtos.PizzaDTO;
-import com.api.pedeai.models.PizzaModel;
+import com.api.pedeai.exception.ResultadoException;
+import com.api.pedeai.models.Pizza;
 import com.api.pedeai.services.PizzaService;
-import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
-@RequestMapping("/pizza")
+@RequestMapping("/pizzas")
 public class PizzaController {
 
     final PizzaService pizzaService;
@@ -26,39 +22,38 @@ public class PizzaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PizzaModel>> getAllPizzas(PizzaModel pizzaModel){
-        return ResponseEntity.status(HttpStatus.OK).body(pizzaService.findAll());
+    public List<Pizza> getAllPizzas(Pizza pizza){
+        return pizzaService.findAll();
     }
 
     @Transactional
     @PostMapping()
-    public ResponseEntity<PizzaModel> savePizza(@RequestBody PizzaModel pizzaModel){
-        var pizza = new PizzaModel();
-        pizzaModel.setData(LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.OK).body(pizzaService.save(pizzaModel));
+    @ResponseStatus(CREATED)
+    public Pizza savePizza(@RequestBody Pizza pizza){
+        return pizzaService.save(pizza);
     }
 
     @Transactional
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deletaPizza(@PathVariable(value = "id") UUID id){
-        Optional<PizzaModel> pizzaModelOptional = pizzaService.findById(id);
-        if(pizzaModelOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pizza não foi encontrada");
-        }
-        pizzaService.delete(pizzaModelOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Pizza deletada com sucesso.");
+    @DeleteMapping("{id}")
+    @ResponseStatus(NO_CONTENT)
+    public void deletaPizza(@PathVariable Integer id){
+        pizzaService.findById(id)
+                .map( pizzaExistente -> {
+                    pizzaExistente.getId();
+                    pizzaService.delete(pizzaExistente);
+                    return Void.TYPE;
+                }).orElseThrow(() -> new ResultadoException("Pizza não encontrada."));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> alteraPizza(@PathVariable(value = "id") UUID id, @RequestBody @Valid PizzaDTO pizzaDTO){
-        Optional<PizzaModel> pizzaModelOptional = pizzaService.findById(id);
-        if(pizzaModelOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pizza não foi encontrada.");
-        }
-        var pizzaModel = new PizzaModel();
-        BeanUtils.copyProperties(pizzaDTO, pizzaModel);
-        pizzaModel.setId(pizzaModelOptional.get().getId());
-        pizzaModel.setData(pizzaModelOptional.get().getData());
-        return ResponseEntity.status(HttpStatus.OK).body(pizzaService.save(pizzaModel));
+    @Transactional
+    @PutMapping("{id}")
+    @ResponseStatus(NO_CONTENT)
+    public void alteraPizza(@PathVariable Integer id, @RequestBody Pizza pizza){
+        pizzaService.findById(id)
+                .map( pizzaExistente -> {
+                    pizza.setId(pizzaExistente.getId());
+                    pizzaService.save(pizza);
+                    return pizzaExistente;
+                }).orElseThrow(() -> new ResultadoException("Pizza não foi encontrada"));
     }
 }

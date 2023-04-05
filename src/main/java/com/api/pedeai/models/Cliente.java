@@ -1,37 +1,41 @@
 package com.api.pedeai.models;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "TB_CLIENTE")
-public class ClienteModel implements Serializable {
+@Table(name = "cliente")
+public class Cliente implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private UUID id;
-    @Column(name = "nome", nullable = false, length = 255)
-    private String nomeCliente;
-    @Column(name = "email")
-    private String email;
+    private Integer id;
+
+    @Column(name = "nome", length = 100)
+    private String nome;
+
+    @Column(name = "cpf")
+    private String cpf;
+
     @Column(name = "endereco")
     private String endereco;
-    @Column(name = "data_criacao", nullable = false)
+
+    @Column(name = "data_criacao")
     private LocalDateTime data;
 
-    @OneToMany(mappedBy = "clientes")
-    private List<PedidoModel> pedidos = new LinkedList<>();
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
+    private List<Pedido> pedidos;
+
+
 }
