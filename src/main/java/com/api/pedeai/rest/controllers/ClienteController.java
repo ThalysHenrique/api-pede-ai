@@ -1,4 +1,4 @@
-package com.api.pedeai.controllers;
+package com.api.pedeai.rest.controllers;
 
 import com.api.pedeai.exception.ResultadoException;
 import com.api.pedeai.models.Cliente;

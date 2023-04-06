@@ -1,8 +1,8 @@
-package com.api.pedeai.controllers;
+package com.api.pedeai.rest.controllers;
 
 import com.api.pedeai.exception.ResultadoException;
 import com.api.pedeai.models.Pizza;
-import com.api.pedeai.services.PizzaService;
+import com.api.pedeai.repositories.PizzaRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,32 +15,32 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 @RequestMapping("/pizzas")
 public class PizzaController {
 
-    final PizzaService pizzaService;
+    PizzaRepository pizzaRepository;
 
-    public PizzaController(PizzaService pizzaService) {
-        this.pizzaService = pizzaService;
+    public PizzaController(PizzaRepository pizzaRepository) {
+        this.pizzaRepository = pizzaRepository;
     }
 
     @GetMapping
     public List<Pizza> getAllPizzas(Pizza pizza){
-        return pizzaService.findAll();
+        return pizzaRepository.findAll();
     }
 
     @Transactional
     @PostMapping()
     @ResponseStatus(CREATED)
     public Pizza savePizza(@RequestBody Pizza pizza){
-        return pizzaService.save(pizza);
+        return pizzaRepository.save(pizza);
     }
 
     @Transactional
     @DeleteMapping("{id}")
     @ResponseStatus(NO_CONTENT)
     public void deletaPizza(@PathVariable Integer id){
-        pizzaService.findById(id)
+        pizzaRepository.findById(id)
                 .map( pizzaExistente -> {
                     pizzaExistente.getId();
-                    pizzaService.delete(pizzaExistente);
+                    pizzaRepository.delete(pizzaExistente);
                     return Void.TYPE;
                 }).orElseThrow(() -> new ResultadoException("Pizza não encontrada."));
     }
@@ -49,10 +49,10 @@ public class PizzaController {
     @PutMapping("{id}")
     @ResponseStatus(NO_CONTENT)
     public void alteraPizza(@PathVariable Integer id, @RequestBody Pizza pizza){
-        pizzaService.findById(id)
+        pizzaRepository.findById(id)
                 .map( pizzaExistente -> {
                     pizza.setId(pizzaExistente.getId());
-                    pizzaService.save(pizza);
+                    pizzaRepository.save(pizza);
                     return pizzaExistente;
                 }).orElseThrow(() -> new ResultadoException("Pizza não foi encontrada"));
     }

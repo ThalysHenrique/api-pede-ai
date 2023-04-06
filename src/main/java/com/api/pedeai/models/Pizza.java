@@ -23,5 +23,7 @@ public class Pizza implements Serializable {
     private String nome;
     @Column(name = "preco")
     private BigDecimal preco;
+    @Column(name = "quantidade")
+    private Integer quantidade;
 
     }
