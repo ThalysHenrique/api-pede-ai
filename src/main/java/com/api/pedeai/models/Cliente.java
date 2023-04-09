@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,12 +26,16 @@ public class Cliente implements Serializable {
     private Integer id;
 
     @Column(name = "nome", length = 100)
+    @NotEmpty(message = "{campo.nome.obrigatorio}")
     private String nome;
 
     @Column(name = "cpf")
+    @NotEmpty(message = "{campo.cpf.obrigatorio}")
+    @CPF(message = "{campo.cpf.valido.obrigatorio}")
     private String cpf;
 
     @Column(name = "endereco")
+    @NotEmpty(message = "{campo.endereco.obrigatorio}")
     private String endereco;
 
     @Column(name = "data_criacao")

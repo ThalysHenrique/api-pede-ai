@@ -5,6 +5,7 @@ import com.api.pedeai.models.Cliente;
 import com.api.pedeai.services.ClienteService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class ClienteController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public Cliente saveCliente(@RequestBody Cliente cliente){
+    public Cliente saveCliente(@RequestBody @Valid Cliente cliente){
         cliente.setData(LocalDateTime.now());
         return clienteService.save(cliente);
     }
@@ -54,7 +55,7 @@ public class ClienteController {
 
     @PutMapping("{id}")
     @ResponseStatus(NO_CONTENT)
-    public void alteraCliente(@PathVariable Integer id, @RequestBody Cliente cliente){
+    public void alteraCliente(@PathVariable Integer id, @RequestBody @Valid Cliente cliente){
         clienteService.findById(id)
                 .map( clienteExistente -> {
                     cliente.setId(clienteExistente.getId());
