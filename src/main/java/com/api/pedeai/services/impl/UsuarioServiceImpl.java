@@ -1,5 +1,6 @@
 package com.api.pedeai.services.impl;
 
+import com.api.pedeai.exception.SenhaInvalidaException;
 import com.api.pedeai.models.Usuario;
 import com.api.pedeai.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +42,14 @@ public class UsuarioServiceImpl implements UserDetailsService {
     @Transactional
     public Usuario salvar(Usuario usuario){
         return usuarioRepository.save(usuario);
+    }
+
+    public UserDetails autenticar(Usuario usuario){
+        UserDetails user = loadUserByUsername(usuario.getLogin());
+        boolean senhasIguais = encoder.matches(usuario.getSenha(), user.getPassword());
+        if(senhasIguais){
+            return user;
+        }
+        throw new SenhaInvalidaException();
     }
 }
