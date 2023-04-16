@@ -1,6 +1,6 @@
 # API Pede Ai
 
-# Sobre o projeto
+### Sobre o projeto
 
 Consiste em uma API RESTFul para cadastro de pedidos de pizzas.
 
@@ -29,7 +29,7 @@ localhost:8080/usuarios/auth
 
 Será gerado um token válido por 60 minutos.
 
-# Tecnologias utilizadas:
+### Tecnologias utilizadas:
 
 <table>
 
@@ -49,7 +49,7 @@ Será gerado um token válido por 60 minutos.
 
 </table>
 
-# Autor
+### Autor
 
 > Thalys Henrique
 
