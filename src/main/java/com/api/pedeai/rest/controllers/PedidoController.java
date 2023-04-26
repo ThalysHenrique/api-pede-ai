@@ -3,9 +3,11 @@ package com.api.pedeai.rest.controllers;
 import com.api.pedeai.dtos.InformacoesPedidoDTO;
 import com.api.pedeai.dtos.InformacoesPizzaDTO;
 import com.api.pedeai.dtos.PedidoDTO;
+import com.api.pedeai.exception.PedidoNaoEncontradoException;
 import com.api.pedeai.models.Pedido;
 import com.api.pedeai.models.Pizza;
 import com.api.pedeai.services.PedidoService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -28,9 +30,14 @@ public class PedidoController {
         this.pedidoService = pedidoService;
     }
 
+    @GetMapping
+    public List<Pedido> getAll(){
+        return pedidoService.obterTodosPedidos();
+    }
+
     @PostMapping
     @ResponseStatus(CREATED)
-    public Integer savePedido(@RequestBody PedidoDTO pedidoDTO){
+    public Integer savePedido(@RequestBody PedidoDTO pedidoDTO) {
         Pedido pedido = pedidoService.salvar(pedidoDTO);
         return pedido.getId();
     }
@@ -49,6 +56,7 @@ public class PedidoController {
                  .cpf(pedido.getCliente().getCpf())
                  .nomeCliente(pedido.getCliente().getNome())
                  .total(pedido.getPrecoTotal())
+                 .status(pedido.getStatus())
                  .pizzas(converter(pedido.getPizzas()))
                  .build();
     }
@@ -65,5 +73,17 @@ public class PedidoController {
                         .quantidade(pizza.getQuantidade())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    @PutMapping("/{id}")
+    public void update(@PathVariable Integer id, PedidoDTO pedidoDTO){
+        Pedido idPedido = pedidoService.obterPedido(id)
+                .orElseThrow(() -> new PedidoNaoEncontradoException("Pedido não encontrado"));
+
+        var novoPedido = new Pedido();
+        BeanUtils.copyProperties(idPedido, novoPedido);
+        novoPedido.setStatus("Pedido em separação");
+        pedidoService.salvar(novoPedido);
+
     }
 }

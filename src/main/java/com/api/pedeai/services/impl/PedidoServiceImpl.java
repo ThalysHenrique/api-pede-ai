@@ -36,12 +36,14 @@ public class PedidoServiceImpl implements PedidoService {
 
         Pedido pedido = new Pedido();
         pedido.setPrecoTotal(pedidoDTO.getTotal());
+        pedido.setStatus("Pedido criado");
         pedido.setData(LocalDateTime.now());
         pedido.setCliente(cliente);
 
         List<Pizza> pizzas = converterPizza(pedido, pedidoDTO.getPizzas());
         pedidoRepository.save(pedido);
         pedido.setPizzas(pizzas);
+
         return pedido;
     }
 
@@ -63,5 +65,15 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public Optional<Pedido> obterPedido(Integer id) {
         return pedidoRepository.findByIdFetchItens(id);
+    }
+
+    @Override
+    public Pedido salvar(Pedido pedido) {
+        return pedidoRepository.save(pedido);
+    }
+
+    @Override
+    public List<Pedido> obterTodosPedidos() {
+        return pedidoRepository.findAll();
     }
 }

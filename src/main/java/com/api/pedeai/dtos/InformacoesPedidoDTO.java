@@ -20,5 +20,6 @@ public class InformacoesPedidoDTO {
     private String nomeCliente;
     private BigDecimal total;
     private LocalDateTime dataPedido;
+    private String status;
     private List<InformacoesPizzaDTO> pizzas;
 }

@@ -1,6 +1,6 @@
 package com.api.pedeai.rest.controllers.exceptionHandler;
 
-import com.api.pedeai.exception.PedidoNotFoundException;
+import com.api.pedeai.exception.PedidoNaoEncontradoException;
 import com.api.pedeai.exception.ResultadoException;
 import com.api.pedeai.rest.ApiErrors;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -25,9 +25,9 @@ public class ApplicationControllerAdvice {
     }
 
 
-    @ExceptionHandler(PedidoNotFoundException.class)
+    @ExceptionHandler(PedidoNaoEncontradoException.class)
     @ResponseStatus(NOT_FOUND)
-    public ApiErrors handlePedidoNotFoundException(PedidoNotFoundException exception){
+    public ApiErrors handlePedidoNotFoundException(PedidoNaoEncontradoException exception){
         String mensagemErro = exception.getMessage();
         return new ApiErrors(mensagemErro);
     }

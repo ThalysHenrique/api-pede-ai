@@ -27,6 +27,9 @@ public class Pedido {
     @Column(name = "data_criacao")
     private LocalDateTime data;
 
+    @Column
+    private String status;
+
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
