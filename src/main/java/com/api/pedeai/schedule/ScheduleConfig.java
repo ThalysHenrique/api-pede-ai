@@ -17,14 +17,6 @@ public class ScheduleConfig {
     @Scheduled(fixedDelay = 10000)
     public void atualizaPedidoCriado() throws InterruptedException {
 
-        List<Pedido> pedidosNulos = pedidoRepository.findByStatus(null);
-
-        for(Pedido p : pedidosNulos){
-            p.setStatus("Pedido Criado");
-            pedidoRepository.save(p);
-        }
-
-
         List<Pedido> pedidosCriados = pedidoRepository.findByStatus("Pedido Criado");
 
         for(Pedido p : pedidosCriados){
@@ -41,6 +33,13 @@ public class ScheduleConfig {
             pedidoRepository.save(p);
         }
 
+        Thread.sleep(3000);
 
+        List<Pedido> pedidosEntregues = pedidoRepository.findByStatus("Pedido em Rota de Entrega");
+
+        for(Pedido p : pedidosEntregues){
+            p.setStatus("Pedido Entregue");
+            pedidoRepository.save(p);
+        }
     }
 }
