@@ -2,9 +2,9 @@
 
 ### Sobre o projeto
 
-Consiste em uma API RESTFul para cadastro de pedidos de pizzas.
+API para realizar o cadastro de pedidos de pizzas.
 
-Restrições:
+#### Restrições:
 
 - Usuário precisa estar cadastrado para realizar os pedidos!
 
@@ -28,6 +28,8 @@ localhost:8080/usuarios/auth
 }
 
 Será gerado um token válido por 60 minutos.
+
+#### Serviço Automatizado:
 
 + Status dos Pedidos são atualizados automaticamente a cada 1 hora.
 
