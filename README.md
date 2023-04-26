@@ -29,7 +29,7 @@ localhost:8080/usuarios/auth
 
 Será gerado um token válido por 60 minutos.
 
-+ Status dos Pedidos são atualizados automaticamente a cada 10 segundos.
++ Status dos Pedidos são atualizados automaticamente a cada 1 hora.
 
 ### Tecnologias utilizadas:
 
