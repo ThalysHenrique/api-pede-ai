@@ -10,7 +10,7 @@ Restrições:
 
  #### Instruções para realizar o cadastro:
 
-Acesse a url: 
++ Acesse a url: 
 localhost:8080/usuarios
 
 {
@@ -19,7 +19,7 @@ localhost:8080/usuarios
   "admin": "insira true = admin ou false = user"
 }
 
-Após realizar o cadastro, acesse a url abaixo para realizar a autenticação:
++ Após realizar o cadastro, acesse a url abaixo para realizar a autenticação:
 localhost:8080/usuarios/auth
 
 {
@@ -28,6 +28,8 @@ localhost:8080/usuarios/auth
 }
 
 Será gerado um token válido por 60 minutos.
+
++ Status dos Pedidos são atualizados automaticamente a cada 10 segundos.
 
 ### Tecnologias utilizadas:
 
