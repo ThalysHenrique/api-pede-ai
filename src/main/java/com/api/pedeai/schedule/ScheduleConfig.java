@@ -14,7 +14,11 @@ public class ScheduleConfig {
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    @Scheduled(fixedDelay = 10000)
+    private final long segundo = 1000;
+    private final long minuto = segundo * 60;
+    private final long hora = minuto * 60;
+
+    @Scheduled(fixedDelay = hora)
     public void atualizaPedidoCriado() throws InterruptedException {
 
         List<Pedido> pedidosCriados = pedidoRepository.findByStatus("Pedido Criado");
