@@ -1,8 +1,8 @@
-# API Pede Ai
+# Pede Ai App
 
 ### Sobre o projeto
 
-API para realizar o cadastro de pedidos de pizzas.
+API para realizar cadastros de pedidos.
 
 #### Restrições:
 
